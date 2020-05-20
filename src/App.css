@@ -88,7 +88,6 @@ main {
 
 .Modal_Content img {
   margin-bottom: 10px;
-  float: left;
 }
 .Modal_Content .comments {
   margin-left: 14px;
@@ -103,9 +102,7 @@ main {
 .Modal_Content .comments::-webkit-scrollbar {
   width: 3px;
 }
-/* .Modal_Content .comments::-webkit-scrollbar-track {
-  background: #f1f1f1; 
-}  */
+
 .Modal_Content .comments::-webkit-scrollbar-thumb {
   background: #99999940;
 }
@@ -190,6 +187,11 @@ main {
   color: #ffffff;
   margin-top: 17px;
 }
+.Modal .formError {
+  padding-top: 3px;
+  position: absolute;
+  color: #d30000;
+}
 
 @media (min-width: 767px) {
   .gallery {
@@ -209,11 +211,9 @@ main {
   .Modal_Content img {
     margin-bottom: 25px;
   }
-  .Modal_Content img,
+
   .Modal_Content .comments {
     float: none;
-  }
-  .Modal_Content .comments {
     margin-left: 0;
     height: calc(10% + 50px);
   }
