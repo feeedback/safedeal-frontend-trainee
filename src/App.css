@@ -1,38 +1,226 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
 .App {
-  text-align: center;
-}
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Roboto Condensed;
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  margin: auto 20px;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex: 0 0 auto;
 }
 
-.App-link {
-  color: #61dafb;
+.App-header-h1 {
+  font-size: 36px;
+  line-height: 36px;
+  text-transform: uppercase;
+  margin: 15px 0 30px 0;
+
+  font-weight: 400;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+main {
+  flex: 1 0 auto;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 30px 20px;
+}
+
+.gallery img {
+  width: 100%;
+
+  max-height: 100%;
+}
+
+.App-footer {
+  min-height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 14px;
+  line-height: 14px;
+  text-transform: uppercase;
+  color: #cccccc;
+  border-top: 1px solid #cccccc;
+  flex: 0 0 auto;
+}
+
+.App-footer-p {
+  margin: 0;
+}
+.App-blur {
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+.Modal_Content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  width: 75%;
+  z-index: 2;
+  margin: auto;
+  padding: 30px;
+  font-family: Roboto;
+}
+
+.Modal_Content img,
+.Modal_Content form {
+  width: 58%;
+  max-width: 600px;
+}
+
+.Modal_Content img {
+  margin-bottom: 10px;
+  float: left;
+}
+.Modal_Content .comments {
+  margin-left: 14px;
+  font-size: 15px;
+  line-height: 15px;
+  float: right;
+  height: calc(19vw + 210px);
+  overflow-y: scroll;
+  width: calc(42% - 14px);
+}
+
+.Modal_Content .comments::-webkit-scrollbar {
+  width: 3px;
+}
+/* .Modal_Content .comments::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}  */
+.Modal_Content .comments::-webkit-scrollbar-thumb {
+  background: #99999940;
+}
+.Modal_Content .comments div {
+  margin-bottom: 20px;
+}
+.Modal_Content .comments p {
+  margin-bottom: 5px;
+  margin-top: 0;
+}
+
+.Modal_Content .comments .date {
+  color: #999999;
+}
+
+.Modal {
+  position: fixed;
+  display: none;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  background: rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+.Modal-shown {
+  display: flex;
+  pointer-events: auto;
+}
+
+.ModalFull {
+  position: absolute;
+  display: block;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.Modal_Content .closeButton {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  right: calc(30px - 13px);
+  top: calc(30px - 13px);
+}
+.Modal_Content .closeButton:before,
+.Modal_Content .closeButton:after {
+  position: absolute;
+  left: 13px;
+  content: " ";
+  height: 26px;
+  width: 1px;
+  background-color: #000;
+}
+.Modal_Content .closeButton:before {
+  transform: rotate(45deg);
+}
+.Modal_Content .closeButton:after {
+  transform: rotate(-45deg);
+}
+.Modal input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  height: 30px;
+  margin-top: 19px;
+  padding: 0 11px;
+  width: 100%;
+}
+.Modal input::placeholder {
+  font-size: 13px;
+  line-height: 15px;
+
+  color: #cccccc;
+}
+.Modal input[type="submit"] {
+  background: #4997d0;
+  color: #ffffff;
+  margin-top: 17px;
+}
+
+@media (min-width: 767px) {
+  .gallery {
+    grid-template-columns: repeat(3, 1fr);
   }
-  to {
-    transform: rotate(360deg);
+}
+@media (max-width: 767px) {
+  .Modal_Content {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .Modal_Content .comments,
+  .Modal_Content form {
+    padding: 0 22px;
+  }
+  .Modal_Content img {
+    margin-bottom: 25px;
+  }
+  .Modal_Content img,
+  .Modal_Content .comments {
+    float: none;
+  }
+  .Modal_Content .comments {
+    margin-left: 0;
+    height: calc(10% + 50px);
+  }
+  .Modal_Content img,
+  .Modal_Content .comments,
+  .Modal_Content form {
+    width: 100%;
+    max-width: 100%;
   }
 }
