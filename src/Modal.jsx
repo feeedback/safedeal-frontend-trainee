@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import "./App.css";
-import { urls } from "./App.jsx";
+import "./Modal.css";
 
 class Modal extends React.Component {
   constructor(props) {
@@ -16,33 +15,32 @@ class Modal extends React.Component {
 
   abortController = new AbortController();
 
-  getFullImageAndComment = async (id) => {
+  getFullImageAndComment = async (urls, id) => {
     try {
       const response = await fetch(urls.getFullImageAndComment(id), {
         signal: this.abortController.signal,
       });
       const currentImageData = await response.json();
-
       this.setState({ currentImageData });
     } catch (error) {
-      console.log(error);
+      if (error.name !== "AbortError") {
+        throw error;
+      }
     }
   };
 
   componentDidMount() {
-    const { id, handleModalHide } = this.props;
+    const { id, handleModalHide, urls } = this.props;
 
     const escKeyCloseModal = (event) => {
       if (event.keyCode === 27) {
-        console.log("gb");
-
         window.removeEventListener("keydown", escKeyCloseModal);
         handleModalHide(event);
       }
     };
     window.addEventListener("keydown", escKeyCloseModal);
 
-    this.getFullImageAndComment(id);
+    this.getFullImageAndComment(urls, id);
   }
 
   componentWillUnmount() {
@@ -54,12 +52,13 @@ class Modal extends React.Component {
 
     const { currentImageData, form } = this.state;
     const { id, comments } = currentImageData;
+    const { urls } = this.props;
 
-    const newComment = {
-      text: form.commentText,
-      id: form.author,
-      date: Date.now(),
+    const requestError = () => {
+      this.setState({ error: "Error: Bad server response. Try later" });
+      return;
     };
+
     try {
       const response = await fetch(urls.postCommentToImage(id), {
         method: "POST",
@@ -74,13 +73,22 @@ class Modal extends React.Component {
       });
 
       if (response.status !== 204) {
-        this.setState({ error: "Error: Bad server response. Try later" });
+        requestError();
         return;
       }
     } catch (error) {
-      this.setState({ error: "Error: Bad server response. Try later" });
+      if (error.name !== "AbortError") {
+        requestError();
+      }
+
       return;
     }
+
+    const newComment = {
+      text: form.commentText,
+      id: form.author,
+      date: Date.now(),
+    };
 
     this.setState({
       currentImageData: {
@@ -103,7 +111,9 @@ class Modal extends React.Component {
       currentImageData: { id, url },
     } = this.state;
 
-    return <img id={id} src={url} alt="" />;
+    return (
+      <img className="Modal_LargeImage" id={id} src={url} alt="Large img" />
+    );
   }
 
   renderForm() {
@@ -111,12 +121,14 @@ class Modal extends React.Component {
 
     return (
       <form
+        className="Modal_FormNewComment"
         name="addComment"
         action=""
         method=""
         onSubmit={this.handleAddComment}
       >
         <input
+          className="Modal_FormNewComment_input"
           type="text"
           name="author"
           placeholder="Ваше имя"
@@ -125,6 +137,7 @@ class Modal extends React.Component {
           required
         />
         <input
+          className="Modal_FormNewComment_input"
           type="text"
           name="commentText"
           placeholder="Ваш комментарий"
@@ -132,23 +145,31 @@ class Modal extends React.Component {
           onChange={this.handleChange}
           required
         />
-        <input type="submit" value="Оставить комментарий" />
-        {error !== "" ? <span className="formError">{error}</span> : null}
+        <input
+          className="Modal_FormNewComment_input Modal_FormNewComment_submit"
+          type="submit"
+          value="Оставить комментарий"
+        />
+        {error !== "" ? (
+          <span className="Modal_FormNewComment_error">{error}</span>
+        ) : null}
       </form>
     );
   }
 
   renderComments() {
     const {
-      currentImageData: { comments },
+      currentImageData: { comments = [] },
     } = this.state;
 
     return (
-      <section className="comments">
+      <section className="Modal_Comments">
         {comments.map(({ id, text, date }) => (
-          <div key={date} id={id}>
-            <p className="date">{new Date(date).toLocaleDateString("ru-RU")}</p>
-            <p className="text">{text}</p>
+          <div key={date} id={id} className="Modal_Comments_commentWrapper">
+            <p className="Modal_Comments_p Modal_Comments_date">
+              {new Date(date).toLocaleDateString("ru-RU")}
+            </p>
+            <p className="Modal_Comments_p">{text}</p>
           </div>
         ))}
       </section>
@@ -157,24 +178,21 @@ class Modal extends React.Component {
 
   render() {
     const { handleModalHide } = this.props;
-    const {
-      currentImageData: { comments = [] },
-    } = this.state;
 
     return (
-      <div id="ModalWindow" className="Modal Modal-shown">
-        <div className="Modal_Content">
+      <div id="ModalWindow" className="Modal">
+        <div className="Modal_contentWrapper">
           {this.renderFullImage()}
-          {comments.length > 0 ? this.renderComments() : null}
+          {this.renderComments()}
           {this.renderForm()}
           <a
             href=""
             title="Закрыть"
-            className="closeButton"
+            className="Modal_closeButton"
             onClick={handleModalHide}
           />
         </div>
-        <a href="" className="ModalFull" onClick={handleModalHide} />
+        <a href="" className="Modal_blurFullWindow" onClick={handleModalHide} />
       </div>
     );
   }

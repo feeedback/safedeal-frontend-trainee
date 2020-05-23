@@ -1,0 +1,162 @@
+.Modal {
+  position: fixed;
+  display: flex;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.Modal_contentWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  z-index: 2;
+  margin: auto;
+  font-family: Roboto;
+
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+.Modal_LargeImage {
+  margin-bottom: 25px;
+}
+
+.Modal_LargeImage,
+.Modal_Comments,
+.Modal_FormNewComment {
+  width: 100%;
+  max-width: 100%;
+}
+
+.Modal_FormNewComment_input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  height: 30px;
+  margin-top: 19px;
+  padding: 0 11px;
+  width: 100%;
+}
+.Modal_FormNewComment_input::placeholder {
+  font-size: 13px;
+  line-height: 15px;
+
+  color: #cccccc;
+}
+.Modal_FormNewComment_submit {
+  background: #4997d0;
+  color: #ffffff;
+  margin-top: 17px;
+}
+.Modal_FormNewComment_error {
+  padding-top: 3px;
+  position: absolute;
+  color: #d30000;
+}
+
+.Modal_Comments,
+.Modal_FormNewComment {
+  padding: 0 22px;
+}
+
+.Modal_Comments {
+  font-size: 15px;
+  line-height: 15px;
+  overflow-y: scroll;
+
+  float: none;
+  margin-left: 0;
+  height: calc(10% + 50px);
+}
+
+.Modal_Comments::-webkit-scrollbar {
+  width: 3px;
+}
+.Modal_Comments::-webkit-scrollbar-thumb {
+  background: #99999940;
+}
+
+.Modal_Comments_commentWrapper {
+  margin-bottom: 20px;
+  /* padding: 0;
+  width: 100%;
+  height: 100%; */
+}
+.Modal_Comments_p {
+  margin-bottom: 5px;
+  margin-top: 0;
+}
+
+.Modal_Comments_date {
+  color: #999999;
+}
+
+.Modal_blurFullWindow {
+  position: absolute;
+  display: block;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.Modal_closeButton {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  right: calc(30px - 26px / 2);
+  top: calc(30px - 26px / 2);
+}
+.Modal_closeButton:before,
+.Modal_closeButton:after {
+  position: absolute;
+  left: calc(26px / 2);
+  content: " ";
+  height: 26px;
+  width: 1px;
+  background-color: #000;
+}
+.Modal_closeButton:before {
+  transform: rotate(45deg);
+}
+.Modal_closeButton:after {
+  transform: rotate(-45deg);
+}
+
+@media (min-width: 768px) {
+  .Modal_contentWrapper {
+    width: 75%;
+    height: auto;
+    padding: 30px;
+  }
+
+  .Modal_LargeImage {
+    margin-bottom: 10px;
+  }
+  .Modal_LargeImage,
+  .Modal_FormNewComment {
+    float: left;
+    width: 58%;
+    max-width: 600px;
+  }
+  .Modal_FormNewComment,
+  .Modal_Comments {
+    padding: 0;
+  }
+
+  .Modal_Comments {
+    margin-left: 14px;
+    float: right;
+    height: calc(19vw + 210px);
+    width: calc(42% - 14px);
+  }
+}
