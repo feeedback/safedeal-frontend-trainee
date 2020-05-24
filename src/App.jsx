@@ -7,7 +7,7 @@ const urls = {
   getImages: () => "https://boiling-refuge-66454.herokuapp.com/images",
   getFullImageAndComment: (id) =>
     `https://boiling-refuge-66454.herokuapp.com/images/${id}`,
-  postCommentToImage: (id) =>
+  postNewCommentToImage: (id) =>
     `https://boiling-refuge-66454.herokuapp.com/images/${id}/comments`,
 };
 

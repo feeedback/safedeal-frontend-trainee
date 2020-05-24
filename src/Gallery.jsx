@@ -3,43 +3,47 @@
 import React from "react";
 import "./Gallery.css";
 
-class Gallery extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { images: [], isModalShown: false, currentImageID: null };
-  }
-
-  abortController = new AbortController();
-
-  getImages = async (urls) => {
+class Gallery extends React.PureComponent {
+  getImages = async (urls, signal) => {
     try {
-      const response = await fetch(urls.getImages(), {
-        signal: this.abortController.signal,
-      });
+      const response = await fetch(urls.getImages(), { signal });
       const images = await response.json();
-      this.setState({ images });
+      return images;
     } catch (error) {
       throw error;
     }
   };
 
+  abortController = new AbortController();
+
+  constructor(props) {
+    super(props);
+    this.state = { images: [], isModalShown: false, currentImageID: null };
+  }
+
   componentDidMount() {
     const { urls } = this.props;
 
-    this.getImages(urls);
+    this.getImages(urls, this.abortController.signal)
+      .then((images) => this.setState({ images }))
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          console.error(error);
+        }
+      });
   }
 
   componentWillUnmount() {
     this.abortController.abort();
   }
 
-  handleModalShow = (event) => {
+  _handleModalShow = (event) => {
     event.preventDefault();
 
     this.setState({ isModalShown: true, currentImageID: event.target.id });
   };
 
-  handleModalHide = (event) => {
+  _handleModalHide = (event) => {
     event.preventDefault();
 
     this.setState({ isModalShown: false });
@@ -49,7 +53,7 @@ class Gallery extends React.Component {
     const { images, currentImageID, isModalShown } = this.state;
     return (
       <>
-        <div className="Gallery" onClick={this.handleModalShow}>
+        <div className="Gallery" onClick={this._handleModalShow}>
           {images.map((img) => (
             <img
               className="Gallery_image"
@@ -63,7 +67,7 @@ class Gallery extends React.Component {
         {isModalShown
           ? React.cloneElement(this.props.children, {
               id: currentImageID,
-              handleModalHide: this.handleModalHide,
+              _handleModalHide: this._handleModalHide,
             })
           : null}
       </>
