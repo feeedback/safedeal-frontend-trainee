@@ -34,42 +34,6 @@ class Modal extends React.Component {
 
   abortController = new AbortController();
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentImageData: {},
-      form: { author: "", commentText: "" },
-      error: "",
-    };
-  }
-
-  componentDidMount() {
-    const { id, _handleModalHide, urls } = this.props;
-
-    const escKeyCloseModal = (event) => {
-      if (event.keyCode === 27) {
-        window.removeEventListener("keydown", escKeyCloseModal);
-        _handleModalHide(event);
-      }
-    };
-    window.addEventListener("keydown", escKeyCloseModal);
-
-    this.getFullImageAndComment(
-      urls.getFullImageAndComment(id),
-      this.abortController.signal
-    )
-      .then((currentImageData) => this.setState({ currentImageData }))
-      .catch((error) => {
-        if (error.name !== "AbortError") {
-          console.error(error);
-        }
-      });
-  }
-
-  componentWillUnmount() {
-    this.abortController.abort();
-  }
-
   _handleAddComment = async (event) => {
     event.preventDefault();
 
@@ -116,6 +80,41 @@ class Modal extends React.Component {
 
     this.setState({ form: { ...form, [name]: value }, error: "" });
   };
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentImageData: {},
+      form: { author: "", commentText: "" },
+      error: "",
+    };
+  }
+
+  componentDidMount() {
+    const { id, _handleModalHide, urls } = this.props;
+
+    const escKeyCloseModal = (event) => {
+      if (event.keyCode === 27) {
+        window.removeEventListener("keydown", escKeyCloseModal);
+        _handleModalHide(event);
+      }
+    };
+    window.addEventListener("keydown", escKeyCloseModal);
+
+    this.getFullImageAndComment(
+      urls.getFullImageAndComment(id),
+      this.abortController.signal
+    )
+      .then((currentImageData) => this.setState({ currentImageData }))
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          console.error(error);
+        }
+      });
+  }
+
+  componentWillUnmount() {
+    this.abortController.abort();
+  }
 
   _renderFullImage() {
     const {
