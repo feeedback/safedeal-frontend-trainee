@@ -16,7 +16,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "buildForGhPages": "cross-env PUBLIC_URL=./safedeal-frontend-trainee/ react-scripts build"
+    "buildForGhPages": "cross-env PUBLIC_URL=. react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
