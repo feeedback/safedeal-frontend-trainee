@@ -40,12 +40,14 @@ class Gallery extends React.PureComponent {
   _handleModalShow = (event) => {
     event.preventDefault();
 
+    document.body.classList.add('bodyDisableScroll');
     this.setState({ isModalShown: true, currentImageID: event.target.id });
   };
 
   _handleModalHide = (event) => {
     event.preventDefault();
 
+    document.body.classList.remove("bodyDisableScroll");
     this.setState({ isModalShown: false });
   };
 

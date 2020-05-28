@@ -65,6 +65,9 @@ class Modal extends React.Component {
           },
           form: { author: "", commentText: "" },
         });
+        
+        const commentsEl = this.myRefCommentBlock.current;
+        commentsEl.scrollTo(0,  commentsEl.scrollHeight - commentsEl.offsetHeight);
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
@@ -80,6 +83,7 @@ class Modal extends React.Component {
 
     this.setState({ form: { ...form, [name]: value }, error: "" });
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -87,6 +91,7 @@ class Modal extends React.Component {
       form: { author: "", commentText: "" },
       error: "",
     };
+    this.myRefCommentBlock = React.createRef();
   }
 
   componentDidMount() {
@@ -173,7 +178,7 @@ class Modal extends React.Component {
     } = this.state;
 
     return (
-      <section className="Modal_Comments">
+      <section className="Modal_Comments" ref={this.myRefCommentBlock}>
         {comments.map(({ id, text, date }) => (
           <div key={date} id={id} className="Modal_Comments_commentWrapper">
             <p className="Modal_Comments_p Modal_Comments_date">
